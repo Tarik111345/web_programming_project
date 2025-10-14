@@ -6,6 +6,40 @@
 }
 
 /* Home page */
+/* Hero Section */
+.hero {
+  height: 100vh;
+  background: url('/frontend/assets/img/hero-fitness.jpg.png') top center/cover no-repeat;
+  color: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  position: relative;
+}
+
+.hero .highlight {
+  color: #ff6600;
+}
+
+/* Features Section */
+.features .feature-card img {
+  object-fit: cover;
+  height: 200px; /* or adjust based on your preference */
+}
+
+/* CTA Section */
+.cta {
+  background-color: #ff6600;
+  color: white;
+}
+
 .hero::before {
   content: "";
   position: absolute;
@@ -18,4 +52,41 @@
   position: relative;
   z-index: 2;
 }
+
+/* Products page */
+
+/* Background gradient for products section */
+.products-page .products {
+  background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Product Card */
+.products-page .product-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 12px;
+  position: relative;
+}
+
+/* Hover effect for product card */
+.products-page .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+}
+
+/* Badges */
+.products-page .badge-new {
+  background-color: #28a745;
+}
+
+.products-page .badge-popular {
+  background-color: #dc3545;
+}
+
+/* Position badges properly */
+.products-page .product-card .position-absolute {
+  top: 10px;
+  right: 10px;
+}
+
+
 

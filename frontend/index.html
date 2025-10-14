@@ -10,6 +10,7 @@
 
   <!-- Custom CSS -->
   <link href="assets/css/styles.css" rel="stylesheet">
+  <link href="assets/css/spapp.css" rel="stylesheet">
 </head>
 <body>
   <!-- Navbar -->
@@ -24,7 +25,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#product_details">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#products_list">Products</a></li>
           <li class="nav-item"><a class="nav-link" href="#cart">Cart</a></li>
           <li class="nav-item"><a class="nav-link" href="#checkout">Checkout</a></li>
           <li class="nav-item"><a class="nav-link" href="#dashboard_user">Dashboard</a></li>
@@ -36,15 +37,17 @@
   </nav>
 
   <!-- Main content (SPApp area) -->
-  <main id="spapp" class="container my-5">
-      <section id="home" data-load="home.html"></section>
-      <section id="product_details" data-load="product_details.html"></section>
-      <section id="cart" data-load="cart.html"></section>
-      <section id="checkout" data-load="checkout.html"></section>
-      <section id="dashboard_user" data-load="dashboard_user.html"></section>
-      <section id="login" data-load="login.html"></section>
-      <section id="register" data-load="register.html"></section>
-  </main>
+   <section id="page-content">
+    <main id="spapp" class="container my-5">
+        <section id="home" data-load="home.html"></section>
+        <section id="products_list" data-load="products_list.html"></section>
+        <section id="cart" data-load="cart.html"></section>
+        <section id="checkout" data-load="checkout.html"></section>
+        <section id="dashboard_user" data-load="dashboard_user.html"></section>
+        <section id="login" data-load="login.html"></section>
+        <section id="register" data-load="register.html"></section>
+    </main>
+  </section>
 
   <!-- JS Files -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
