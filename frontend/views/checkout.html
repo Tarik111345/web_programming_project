@@ -1,0 +1,48 @@
+<div class="checkout-page container py-5">
+  <h2 class="fw-bold text-center mb-4">Checkout</h2>
+
+  <div class="row g-4">
+    <!-- LEFT: Customer Info -->
+    <div class="col-md-6">
+      <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold mb-3">Billing Information</h5>
+        <form id="checkoutForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" id="name" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" id="address" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="payment" class="form-label">Payment Method</label>
+            <select id="payment" class="form-select" required>
+              <option value="">Select...</option>
+              <option value="credit">Credit Card</option>
+              <option value="paypal">PayPal</option>
+              <option value="cod">Cash on Delivery</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-warning w-100 fw-bold">Place Order</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT: Order Summary -->
+    <div class="col-md-6">
+      <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold mb-3">Order Summary</h5>
+        <ul id="checkoutSummary" class="list-group mb-3"></ul>
+        <div class="d-flex justify-content-between fw-bold">
+          <span>Total:</span>
+          <span id="checkoutTotal">$0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
