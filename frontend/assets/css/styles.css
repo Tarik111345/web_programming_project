@@ -6,38 +6,19 @@
 }
 
 /* Home page */
-/* Hero Section */
 .hero {
   height: 100vh;
-  background: url('/frontend/assets/img/hero-fitness.jpg.png') top center/cover no-repeat;
+  background-image: url('/frontend/assets/img/hero-fitness.jpg.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   color: white;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-}
-
-.hero-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-  position: relative;
-}
-
-.hero .highlight {
-  color: #ff6600;
-}
-
-/* Features Section */
-.features .feature-card img {
-  object-fit: cover;
-  height: 200px; /* or adjust based on your preference */
-}
-
-/* CTA Section */
-.cta {
-  background-color: #ff6600;
-  color: white;
+  overflow: hidden;
 }
 
 .hero::before {
@@ -46,11 +27,44 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1;
-  pointer-events: none;
 }
-.hero > div {
+
+.hero-overlay {
   position: relative;
   z-index: 2;
+}
+
+.hero .highlight {
+  color: #ff6600;
+}
+
+/* Features Section */
+.features .feature-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.features .feature-card {
+  border-radius: 12px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.features .feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* CTA Section */
+.cta {
+  background-color: #ff6600;
+  color: white;
+}
+
+.cta .btn-light:hover {
+  background-color: #fff3cd;
 }
 
 /* Products page */
