@@ -8,7 +8,7 @@
 /* Home page */
 .hero {
   height: 100vh;
-  background-image: url('/frontend/assets/img/hero-fitness.jpg.png');
+  background-image: url('../img/hero-fitness.jpg');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
