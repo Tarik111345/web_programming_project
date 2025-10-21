@@ -1,0 +1,44 @@
+<!-- USER DASHBOARD PAGE -->
+<div class="dashboard-page container py-5">
+  <h2 class="fw-bold text-center mb-4">User Dashboard</h2>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- User Info Card -->
+      <div class="card p-4 mb-4 shadow-sm">
+        <h4>Welcome, <span id="dashboardUserName"></span>!</h4>
+        <p>Email: <span id="dashboardUserEmail"></span></p>
+        <button id="logoutBtn" class="btn btn-danger fw-bold mt-2">Logout</button>
+      </div>
+
+      <!-- Cart Preview Card -->
+      <div class="card p-4 mb-4 shadow-sm">
+        <h5>Your Cart</h5>
+        <table class="table table-sm" id="dashboardCartTable">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardCartBody">
+            <!-- Cart items will be dynamically loaded -->
+          </tbody>
+        </table>
+        <p class="text-end fw-bold">Total: $<span id="dashboardCartTotal">0.00</span></p>
+        <a href="#checkout" class="btn btn-warning w-100 fw-bold">Go to Checkout</a>
+      </div>
+
+      <!-- Quick Links Card -->
+      <div class="card p-4 shadow-sm">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#products_list" class="text-decoration-none">Browse Products</a></li>
+          <li><a href="#cart" class="text-decoration-none">View Full Cart</a></li>
+          <li><a href="#checkout" class="text-decoration-none">Checkout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
