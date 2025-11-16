@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OAuth2 Redirect</title>
+</head>
+<body>
+<script>
+  'use strict';
+  function run () {
+    var oauth2 = window.opener.swaggerUIRedirectOauth2;
+    var redirectUrl = window.location.href;
+    var query = redirectUrl.substring(redirectUrl.indexOf('?') + 1);
+    var params = {};
+    query.split("&").forEach(function (pair) {
+      var [key, value] = pair.split("=");
+      params[key] = decodeURIComponent(value);
+    });
+    window.opener.postMessage(params, oauth2.redirectUrl);
+    window.close();
+  }
+  run();
+</script>
+</body>
+</html>

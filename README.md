@@ -72,3 +72,104 @@ Option 1: Live Server (VS Code)
 Option 2: XAMPP (localhost)
 
 -http://localhost/hadrofit/frontend/index.html
+
+
+Milestone 3 – Full CRUD Implementation & Swagger API
+Description
+
+In Milestone 3, the backend was extended with a Service Layer, Routes, and OpenAPI (Swagger) documentation.
+Now, every entity supports full CRUD operations with RESTful endpoints that are automatically documented in Swagger UI.
+
+What Was Done
+
+Implemented Service Layer for each entity (UserService, ProductService, CategoryService, CartService, OrderService, PaymentService).
+
+Each service handles validation, business logic, and database communication.
+
+- You can test services with http://localhost/hadrofit/backend/test_services.php
+
+Created Routes using FlightPHP for all CRUD operations.
+
+Added @OA annotations for every endpoint to generate OpenAPI docs.
+
+Installed dependencies:
+
+composer require flightphp/core
+composer require zircote/swagger-php:^3.3
+
+
+Created and configured Swagger documentation:
+
+doc_setup.php → API info (title, version, contact)
+
+swagger.php → generates JSON documentation
+
+index.php → renders Swagger UI
+
+Swagger Details
+
+Base URL: http://localhost/hadrofit/backend
+
+Swagger UI: http://localhost/hadrofit/backend/public/v1/docs/
+
+Swagger JSON: http://localhost/hadrofit/backend/public/v1/docs/swagger.php
+
+OpenAPI Version: 3.0.0
+
+Example Endpoints
+
+Users
+
+Method	Endpoint	Description
+GET	/api/users	Get all users
+GET	/api/users/{id}	Get user by ID
+POST	/api/users	Add a new user
+PUT	/api/users/{id}	Update user
+DELETE	/api/users/{id}	Delete user
+
+Products
+
+Method	Endpoint	Description
+GET	/api/products	Get all products
+GET	/api/products/{id}	Get product by ID
+POST	/api/products	Add new product
+PUT	/api/products/{id}	Update product
+DELETE	/api/products/{id}	Delete product
+
+(Similar CRUD structure for Categories, Cart, Orders, and Payments.)
+
+Technologies Used
+
+FlightPHP – micro PHP framework for routing
+
+PDO (PHP Data Objects) – database access
+
+Swagger / OpenAPI – API documentation
+
+Composer – dependency management
+
+XAMPP – local server environment
+
+How to Run
+
+Start XAMPP → Apache + MySQL
+
+Clone the repo into htdocs:
+
+cd xampp/htdocs
+git clone https://github.com/yourusername/hadrofit.git
+
+
+Run:
+
+cd hadrofit/backend
+composer install
+
+
+Import hadrofit_db.sql into phpMyAdmin
+
+Open browser:
+
+Swagger UI → http://localhost/hadrofit/backend/public/v1/docs/
+
+Test API → Postman or browser
