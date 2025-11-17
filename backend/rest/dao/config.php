@@ -3,7 +3,7 @@ class Database {
     private static $host = 'localhost';
     private static $dbName = 'hadrofit_db';
     private static $username = 'root';
-    private static $password = 'root';
+    private static $password = '';
     private static $connection = null;
 
     public static function connect() {
