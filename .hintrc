@@ -12,6 +12,13 @@
           "hyphens"
         ]
       }
-    ]
+    ],
+    "axe/name-role-value": [
+      "default",
+      {
+        "button-name": "off"
+      }
+    ],
+    "no-inline-styles": "off"
   }
 }

@@ -2,3 +2,7 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Fix Authentication header
+RewriteCond %{HTTP:Authentication} ^(.*)
+RewriteRule .* - [E=HTTP_AUTHENTICATION:%1]

@@ -26,6 +26,7 @@ $cartService = new CartService();
  * )
  */
 Flight::route('GET /api/cart/@userId', function($userId) use ($cartService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $cart = $cartService->getCartWithProducts($userId);
         Flight::json($cart);
@@ -59,6 +60,7 @@ Flight::route('GET /api/cart/@userId', function($userId) use ($cartService) {
  * )
  */
 Flight::route('POST /api/cart', function() use ($cartService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $data = Flight::request()->data->getData();
         $result = $cartService->addToCart($data);
@@ -91,6 +93,7 @@ Flight::route('POST /api/cart', function() use ($cartService) {
  * )
  */
 Flight::route('DELETE /api/cart/@id', function($id) use ($cartService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $cartService->delete($id);
         Flight::json(['message' => 'Removed from cart']);
@@ -122,6 +125,7 @@ Flight::route('DELETE /api/cart/@id', function($id) use ($cartService) {
  * )
  */
 Flight::route('DELETE /api/cart/user/@userId', function($userId) use ($cartService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $cartService->clearCart($userId);
         Flight::json(['message' => 'Cart cleared']);

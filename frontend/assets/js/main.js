@@ -14,16 +14,10 @@ $(document).ready(function () {
 
   app.run();
 
-  // After SPApp starts, handle the current route (and on every route change)
   handleRouteRender();
   $(window).on("hashchange", handleRouteRender);
 });
 
-// Helpers
-
-
-// Waits until a selector exists in DOM, then runs fn.
-// Solves the "view not yet injected by SPApp when we try to render" problem.
 function renderWhenReady(selector, fn, attempts = 40) {
   if ($(selector).length) {
     fn();
@@ -32,7 +26,6 @@ function renderWhenReady(selector, fn, attempts = 40) {
   }
 }
 
-// Route-aware rendering for views that need DOM nodes present
 function handleRouteRender() {
   const hash = window.location.hash || "#home";
   if (hash === "#cart") {
@@ -44,21 +37,17 @@ function handleRouteRender() {
   }
 }
 
-
-// Mock products 
 const products = [
-  { id: 1, name: "Whey Protein", price: "$29.99", img: "assets/img/protein1.jpg.png", description: "High-quality whey protein for muscle growth.", details: ["24g protein", "Serving Size: 1 scoop", "Availability: In Stock"] },
-  { id: 2, name: "Multivitamins", price: "$19.99", img: "assets/img/vitamins.jpg.png", description: "Daily essential vitamins and minerals to keep your body healthy.", details: ["100% daily values", "Serving Size: 1 tablet", "Availability: In Stock"] },
-  { id: 3, name: "Creatine Monohydrate", price: "$24.99", img: "assets/img/creatine.jpg.png", description: "Boost strength and endurance during high-intensity workouts.", details: ["5g creatine per serving", "Serving Size: 1 scoop", "Availability: In Stock"] },
-  { id: 4, name: "BCAA", price: "$21.99", img: "assets/img/bcaa.jpg.png", description: "Branched-chain amino acids to support muscle recovery.", details: ["6g BCAA", "Serving Size: 1 scoop", "Availability: In Stock"] },
-  { id: 5, name: "Pre-Workout", price: "$27.99", img: "assets/img/preworkout.jpg.png", description: "Increase energy and focus before training sessions.", details: ["Caffeine 200mg", "Serving Size: 1 scoop", "Availability: In Stock"] },
-  { id: 6, name: "Omega 3", price: "$17.99", img: "assets/img/omega3.jpg.png", description: "Supports heart, brain, and joint health.", details: ["1000mg fish oil", "Serving Size: 1 softgel", "Availability: In Stock"] },
-  { id: 7, name: "Glutamine", price: "$22.99", img: "assets/img/glutamine.jpg.png", description: "Promotes muscle recovery and immune system support.", details: ["5g glutamine", "Serving Size: 1 scoop", "Availability: In Stock"] },
-  { id: 8, name: "Protein Bar", price: "$9.99", img: "assets/img/proteinbar.jpg.png", description: "Convenient high-protein snack for on-the-go nutrition.", details: ["20g protein", "Serving Size: 1 bar", "Availability: In Stock"] },
+  { id: 1, name: "Whey Protein", price: "$29.99", img: "assets/img/protein1.jpg", description: "High-quality whey protein for muscle growth.", details: ["24g protein", "Serving Size: 1 scoop", "Availability: In Stock"] },
+  { id: 2, name: "Multivitamins", price: "$19.99", img: "assets/img/vitamins.jpg", description: "Daily essential vitamins and minerals to keep your body healthy.", details: ["100% daily values", "Serving Size: 1 tablet", "Availability: In Stock"] },
+  { id: 3, name: "Creatine Monohydrate", price: "$24.99", img: "assets/img/creatine.jpg", description: "Boost strength and endurance during high-intensity workouts.", details: ["5g creatine per serving", "Serving Size: 1 scoop", "Availability: In Stock"] },
+  { id: 4, name: "BCAA", price: "$21.99", img: "assets/img/bcaa.jpg", description: "Branched-chain amino acids to support muscle recovery.", details: ["6g BCAA", "Serving Size: 1 scoop", "Availability: In Stock"] },
+  { id: 5, name: "Pre-Workout", price: "$27.99", img: "assets/img/preworkout.jpg", description: "Increase energy and focus before training sessions.", details: ["Caffeine 200mg", "Serving Size: 1 scoop", "Availability: In Stock"] },
+  { id: 6, name: "Omega 3", price: "$17.99", img: "assets/img/omega3.jpg", description: "Supports heart, brain, and joint health.", details: ["1000mg fish oil", "Serving Size: 1 softgel", "Availability: In Stock"] },
+  { id: 7, name: "Glutamine", price: "$22.99", img: "assets/img/glutamine.jpg", description: "Promotes muscle recovery and immune system support.", details: ["5g glutamine", "Serving Size: 1 scoop", "Availability: In Stock"] },
+  { id: 8, name: "Protein Bar", price: "$9.99", img: "assets/img/proteinbar.jpg", description: "Convenient high-protein snack for on-the-go nutrition.", details: ["20g protein", "Serving Size: 1 bar", "Availability: In Stock"] },
 ];
 
-
-// Product modal (View Details)
 $("#spapp").on("click", ".view-details", function () {
   const productId = $(this).closest(".product-card").data("id");
   const product = products.find((p) => p.id === productId);
@@ -84,18 +73,12 @@ $("#spapp").on("click", ".view-details", function () {
     });
 });
 
-
-// Cart system
-
-// Load existing cart from localStorage
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Save cart to localStorage
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// Render cart table
 function renderCart() {
   const cartItems = $("#cartItems");
   if (cartItems.length === 0) return; 
@@ -134,7 +117,6 @@ function renderCart() {
   saveCart();
 }
 
-// Add product to cart
 function addToCart(productId) {
   const product = products.find((p) => p.id === productId);
   if (!product) return;
@@ -155,13 +137,11 @@ function addToCart(productId) {
   alert(`${product.name} added to cart!`);
 }
 
-// Add-to-cart buttons in products list
 $(document).on("click", ".add-to-cart", function () {
   const productId = $(this).closest(".product-card").data("id");
   addToCart(productId);
 });
 
-// Quantity change
 $(document).on("input", ".quantity-input", function () {
   const index = $(this).data("index");
   const newQty = parseInt($(this).val(), 10);
@@ -170,15 +150,12 @@ $(document).on("input", ".quantity-input", function () {
   renderCart();
 });
 
-// Remove item
 $(document).on("click", ".remove-item", function () {
   const index = $(this).data("index");
   cart.splice(index, 1);
   saveCart();
   renderCart();
 });
-
-// Checkout system
 
 function renderCheckout() {
   const summary = $("#checkoutSummary");
@@ -207,7 +184,6 @@ function renderCheckout() {
   $("#checkoutTotal").text(`$${total.toFixed(2)}`);
 }
 
-// Place order 
 $(document).on("submit", "#checkoutForm", function (e) {
   e.preventDefault();
 
@@ -234,13 +210,12 @@ $(document).on("submit", "#checkoutForm", function (e) {
   window.location.hash = "#home";
 });
 
-// Register system
-
+// ===== UPDATED: Register with API =====
 $(document).on("submit", "#registerForm", function (e) {
   e.preventDefault();
 
   const name = $("#regName").val().trim();
-  const email = $("#regEmail").val().trim().toLowerCase();
+  const email = $("#regEmail").val().trim();
   const password = $("#regPassword").val();
   const confirm = $("#regConfirm").val();
 
@@ -254,27 +229,24 @@ $(document).on("submit", "#registerForm", function (e) {
     return;
   }
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-
-  if (users.some((u) => u.email === email)) {
-    alert("An account with this email already exists!");
-    return;
-  }
-
-  const newUser = { name, email, password };
-  users.push(newUser);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("✅ Registration successful! You can now log in.");
-  window.location.hash = "#login";
+  // Call API
+  AuthService.register(
+    { name, email, password },
+    function(response) {
+      alert("✅ Registration successful! You can now log in.");
+      window.location.hash = "#login";
+    },
+    function(error) {
+      alert("❌ " + (error.responseJSON?.error || "Registration failed!"));
+    }
+  );
 });
 
-
-// Login system 
+// ===== UPDATED: Login with API =====
 $(document).on("submit", "#loginForm", function (e) {
   e.preventDefault();
 
-  const email = $("#loginEmail").val().trim().toLowerCase();
+  const email = $("#loginEmail").val().trim();
   const password = $("#loginPassword").val();
 
   if (!email || !password) {
@@ -282,34 +254,38 @@ $(document).on("submit", "#loginForm", function (e) {
     return;
   }
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find((u) => u.email === email && u.password === password);
-
-  if (!user) {
-    alert("Invalid email or password!");
-    return;
-  }
-
-  localStorage.setItem("currentUser", JSON.stringify(user));
-  alert(`✅ Welcome back, ${user.name}!`);
-
-  // Move to dashboard; rendering will be handled by handleRouteRender + renderWhenReady
-  window.location.hash = "#dashboard_user";
+  AuthService.login(
+    { email, password },
+    function(response) {
+      alert(`✅ Welcome back, ${response.data.name}!`);
+      window.location.hash = "#dashboard_user";
+    },
+    function(error) {
+      alert("❌ " + (error.responseJSON?.error || "Login failed!"));
+    }
+  );
 });
 
-
-// Dashboard
 function renderDashboard() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = AuthService.getCurrentUser();
   if (!user) {
-    alert("⚠ You must login first!");
+    alert("Login first!");
     window.location.hash = "#login";
     return;
   }
 
   $("#dashboardUserName").text(user.name);
   $("#dashboardUserEmail").text(user.email);
+  $("#dashboardUserRole").text(user.role);
 
+  // Show admin section if admin
+  if (user.role === 'admin') {
+    $("#adminSection").show();
+  } else {
+    $("#adminSection").hide();
+  }
+
+  // Cart preview
   const cartBody = $("#dashboardCartBody");
   const cartTotalEl = $("#dashboardCartTotal");
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -337,9 +313,31 @@ function renderDashboard() {
   cartTotalEl.text(total.toFixed(2));
 }
 
-// Logout
+// Add product handler (admin only)
+$(document).on("submit", "#addProductForm", function(e) {
+  e.preventDefault();
+  const data = {
+    name: $("input[name='name']").val(),
+    description: $("textarea[name='description']").val(),
+    price: parseFloat($("input[name='price']").val()),
+    category_id: parseInt($("input[name='category_id']").val()),
+    stock: parseInt($("input[name='stock']").val())
+  };
+  
+  ProductService.create(data, 
+    function(r) { 
+      alert("✅ Product added!"); 
+      $("#addProductModal").modal('hide');
+    },
+    function(e) { 
+      alert("❌ Error adding product!"); 
+    }
+  );
+});
+
+// ===== UPDATED: Logout with API =====
 $(document).on("click", "#logoutBtn", function () {
-  localStorage.removeItem("currentUser");
+  AuthService.logout();
   alert("✅ You have been logged out!");
   window.location.hash = "#login";
 });
