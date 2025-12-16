@@ -1,0 +1,5 @@
+"css.lint.important": "ignore",
+"css.lint.compatibility": "ignore",
+"css.lint.duplicateProperties": "ignore",
+"css.lint.universalSelector": "ignore",
+"css.lint.zeroUnits": "ignore"

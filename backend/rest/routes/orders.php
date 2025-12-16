@@ -9,18 +9,11 @@ $orderItemService = new OrderItemService();
  * @OA\Get(
  *     path="/api/orders",
  *     tags={"Orders"},
- *     summary="Get all orders",
- *     @OA\Response(
- *         response=200,
- *         description="List of all orders"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Internal server error"
- *     )
+ *     summary="Get all orders"
  * )
  */
 Flight::route('GET /api/orders', function() use ($orderService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $orders = $orderService->getAll();
         Flight::json($orders);
@@ -33,25 +26,11 @@ Flight::route('GET /api/orders', function() use ($orderService) {
  * @OA\Get(
  *     path="/api/orders/{id}",
  *     tags={"Orders"},
- *     summary="Get order by ID with items",
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="Order ID",
- *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Order details with items"
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Order not found"
- *     )
+ *     summary="Get order by ID with items"
  * )
  */
 Flight::route('GET /api/orders/@id', function($id) use ($orderService, $orderItemService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $order = $orderService->getById($id);
         if (!$order) {
@@ -69,25 +48,11 @@ Flight::route('GET /api/orders/@id', function($id) use ($orderService, $orderIte
  * @OA\Get(
  *     path="/api/orders/user/{userId}",
  *     tags={"Orders"},
- *     summary="Get all orders for a user",
- *     @OA\Parameter(
- *         name="userId",
- *         in="path",
- *         required=true,
- *         description="User ID",
- *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="List of user orders"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Internal server error"
- *     )
+ *     summary="Get all orders for a user"
  * )
  */
 Flight::route('GET /api/orders/user/@userId', function($userId) use ($orderService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $orders = $orderService->getByUserId($userId);
         Flight::json($orders);
@@ -100,28 +65,11 @@ Flight::route('GET /api/orders/user/@userId', function($userId) use ($orderServi
  * @OA\Post(
  *     path="/api/orders",
  *     tags={"Orders"},
- *     summary="Create new order",
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"user_id", "total_amount", "status"},
- *             @OA\Property(property="user_id", type="integer", example=1),
- *             @OA\Property(property="total_amount", type="number", format="float", example=99.99),
- *             @OA\Property(property="status", type="string", example="pending"),
- *             @OA\Property(property="shipping_address", type="string", example="123 Main St, City, Country")
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Order created"
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Bad request"
- *     )
+ *     summary="Create new order"
  * )
  */
 Flight::route('POST /api/orders', function() use ($orderService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $data = Flight::request()->data->getData();
         $result = $orderService->createOrder($data);
@@ -135,32 +83,11 @@ Flight::route('POST /api/orders', function() use ($orderService) {
  * @OA\Put(
  *     path="/api/orders/{id}",
  *     tags={"Orders"},
- *     summary="Update order status",
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="Order ID",
- *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="shipped"),
- *             @OA\Property(property="tracking_number", type="string", example="TRACK123456")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Order updated"
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Bad request"
- *     )
+ *     summary="Update order status"
  * )
  */
 Flight::route('PUT /api/orders/@id', function($id) use ($orderService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     try {
         $data = Flight::request()->data->getData();
         $orderService->update($id, $data);

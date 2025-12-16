@@ -24,6 +24,14 @@ class ProductService extends BaseService {
             throw new Exception('Stock cannot be negative');
         }
 
-        return $this->create($data);
+        // Fix: Convert image_url to image for database
+        if (isset($data['image_url'])) {
+            $data['image'] = $data['image_url'];
+            unset($data['image_url']);
+        }
+
+        // Use add() instead of create() to get the inserted ID
+        $result = $this->add($data);
+        return $result['id'];
     }
 }

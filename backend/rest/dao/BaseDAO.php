@@ -31,6 +31,16 @@ class BaseDAO {
         return $stmt->execute($data);
     }
 
+    public function add($data) {
+        $columns = implode(", ", array_keys($data));
+        $placeholders = ":" . implode(", :", array_keys($data));
+        $sql = "INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders)";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($data);
+        $data['id'] = $this->connection->lastInsertId();
+        return $data;
+    }
+
     public function update($id, $data) {
         $fields = "";
         foreach ($data as $key => $value) {
@@ -47,5 +57,12 @@ class BaseDAO {
         $stmt = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = :id");
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
+    }
+
+    public function query_unique($query, $params = []) {
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute($params);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result : null;
     }
 }

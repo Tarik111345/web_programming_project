@@ -24,4 +24,7 @@ class Database {
         }
         return self::$connection;
     }
+    public static function JWT_SECRET() {
+        return 'hadrofit_super_secret_key_2024_9x8z7y6w5v4u3t2s1r';
+    }
 }

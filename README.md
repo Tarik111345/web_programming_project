@@ -202,3 +202,37 @@ Files:
 The backend setup and DAO layer were successfully implemented. The project is now connected to the database through PDO, and the DAO pattern ensures clean code organization, better security, and easier database management.
 
 To run test.php we I used: http://localhost/hadrofit/backend/rest/test.php
+
+
+
+# Hadrofit - Milestone 4: Authentication & Authorization
+
+## Implemented Features
+
+### Backend
+- JWT authentication (register/login endpoints)
+- Password hashing with bcrypt
+- Authentication middleware
+- Role-based access control (admin/user)
+- Protected API routes
+- Complete CRUD API for products
+
+### Frontend
+- Login/Register forms connected to backend API
+- JWT token storage in localStorage
+- Role-based UI (admin panel visibility)
+- User dashboard with authentication
+
+## Known Issues
+- Frontend CRUD operations encounter header transmission issue between jQuery and Apache
+- Backend API fully functional (tested via direct API calls)
+- Workaround: API endpoints accessible via tools like Postman
+
+## Testing
+1. Register: `/auth/register`
+2. Login: `/auth/login` 
+3. Access protected routes with JWT token in `Authentication` header
+
+## Technologies
+- Backend: PHP, FlightPHP, JWT, MySQL
+- Frontend: jQuery, Bootstrap 5, SPApp
