@@ -11,7 +11,7 @@ $productService = new ProductService();
  * )
  */
 Flight::route('GET /api/products', function() use ($productService) {
-    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
+    // Public route - no authentication required
     try {
         $products = $productService->getAll();
         Flight::json($products);
@@ -28,7 +28,7 @@ Flight::route('GET /api/products', function() use ($productService) {
  * )
  */
 Flight::route('GET /api/products/@id', function($id) use ($productService) {
-    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
+    // Public route - no authentication required
     try {
         $product = $productService->getById($id);
         if (!$product) {
@@ -49,7 +49,7 @@ Flight::route('GET /api/products/@id', function($id) use ($productService) {
  * )
  */
 Flight::route('GET /api/products/category/@categoryId', function($categoryId) use ($productService) {
-    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
+    // Public route - no authentication required
     try {
         $products = $productService->getByCategory($categoryId);
         Flight::json($products);
@@ -66,7 +66,17 @@ Flight::route('GET /api/products/category/@categoryId', function($categoryId) us
  * )
  */
 Flight::route('POST /api/products', function() use ($productService) {
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    // Check user directly from Flight context (set by middleware)
+    $user = Flight::get('user');
+    if (!$user) {
+        Flight::json(['error' => 'User not authenticated'], 401);
+        return;
+    }
+    if ($user->role !== Roles::ADMIN) {
+        Flight::json(['error' => 'Access denied: admin only'], 403);
+        return;
+    }
+
     try {
         $data = Flight::request()->data->getData();
         $result = $productService->createProduct($data);
@@ -84,7 +94,17 @@ Flight::route('POST /api/products', function() use ($productService) {
  * )
  */
 Flight::route('PUT /api/products/@id', function($id) use ($productService) {
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    // Check user directly from Flight context (set by middleware)
+    $user = Flight::get('user');
+    if (!$user) {
+        Flight::json(['error' => 'User not authenticated'], 401);
+        return;
+    }
+    if ($user->role !== Roles::ADMIN) {
+        Flight::json(['error' => 'Access denied: admin only'], 403);
+        return;
+    }
+
     try {
         $data = Flight::request()->data->getData();
         $productService->update($id, $data);
@@ -102,7 +122,17 @@ Flight::route('PUT /api/products/@id', function($id) use ($productService) {
  * )
  */
 Flight::route('DELETE /api/products/@id', function($id) use ($productService) {
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    // Check user directly from Flight context (set by middleware)
+    $user = Flight::get('user');
+    if (!$user) {
+        Flight::json(['error' => 'User not authenticated'], 401);
+        return;
+    }
+    if ($user->role !== Roles::ADMIN) {
+        Flight::json(['error' => 'Access denied: admin only'], 403);
+        return;
+    }
+
     try {
         $productService->delete($id);
         Flight::json(['message' => 'Product deleted']);

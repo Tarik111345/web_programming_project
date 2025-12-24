@@ -16,7 +16,7 @@ class AuthService extends BaseService {
         return $this->auth_dao->get_user_by_email($email);
     }
 
-    public function register($entity) {  
+    public function register($entity) {
         if (empty($entity['email']) || empty($entity['password'])) {
             return ['success' => false, 'error' => 'Email and password are required.'];
         }
@@ -26,11 +26,16 @@ class AuthService extends BaseService {
             return ['success' => false, 'error' => 'Email already registered.'];
         }
 
+        // Add default role if not provided
+        if (!isset($entity['role']) || empty($entity['role'])) {
+            $entity['role'] = Roles::USER;
+        }
+
         $entity['password'] = password_hash($entity['password'], PASSWORD_BCRYPT);
         $entity = parent::add($entity);
         unset($entity['password']);
 
-        return ['success' => true, 'data' => $entity];             
+        return ['success' => true, 'data' => $entity];
     }
 
     public function login($entity) {  
