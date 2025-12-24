@@ -1,4 +1,14 @@
 $(document).ready(function () {
+  // Configure BlockUI to appear above Bootstrap modals
+  $.blockUI.defaults.css.border = 'none';
+  $.blockUI.defaults.css.padding = '15px';
+  $.blockUI.defaults.css.backgroundColor = '#000';
+  $.blockUI.defaults.css['-webkit-border-radius'] = '10px';
+  $.blockUI.defaults.css['-moz-border-radius'] = '10px';
+  $.blockUI.defaults.css.opacity = 0.5;
+  $.blockUI.defaults.css.color = '#fff';
+  $.blockUI.defaults.baseZ = 2000; // Higher than Bootstrap modals (1055)
+
   window.app = $.spapp({
     defaultView: "home",
     templateDir: "./views/",
@@ -235,15 +245,24 @@ $(document).on("submit", "#registerForm", function (e) {
     return;
   }
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   // Call API
   AuthService.register(
     { name, email, password },
     function(response) {
-      alert("✅ Registration successful! You can now log in.");
-      window.location.hash = "#login";
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Registration successful! You can now log in.");
+        window.location.hash = "#login";
+      }, 400);
     },
     function(error) {
-      alert("❌ " + (error.responseJSON?.error || "Registration failed!"));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ " + (error.responseJSON?.error || "Registration failed!"));
+      }, 400);
     }
   );
 });
@@ -260,14 +279,23 @@ $(document).on("submit", "#loginForm", function (e) {
     return;
   }
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   AuthService.login(
     { email, password },
     function(response) {
-      alert(`✅ Welcome back, ${response.data.name}!`);
-      window.location.hash = "#dashboard_user";
+      setTimeout(function() {
+        $.unblockUI();
+        alert(`✅ Welcome back, ${response.data.name}!`);
+        window.location.hash = "#dashboard_user";
+      }, 400);
     },
     function(error) {
-      alert("❌ " + (error.responseJSON?.error || "Login failed!"));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ " + (error.responseJSON?.error || "Login failed!"));
+      }, 400);
     }
   );
 });
@@ -401,16 +429,25 @@ $(document).on("submit", "#addProductForm", function(e) {
     return;
   }
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   ProductService.create(data,
     function(r) {
-      alert("✅ Product added!");
-      $("#addProductModal").modal('hide');
-      form[0].reset();
-      loadAdminProducts(); // Reload list
-      renderProductsPage(); // Refresh products page if open
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Product added!");
+        $("#addProductModal").modal('hide');
+        form[0].reset();
+        loadAdminProducts(); // Reload list
+        renderProductsPage(); // Refresh products page if open
+      }, 400);
     },
     function(xhr) {
-      alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      }, 400);
     }
   );
 });
@@ -453,15 +490,24 @@ $(document).on("submit", "#editProductForm", function(e) {
     image: form.find("input[name='image']").val() || null
   };
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   ProductService.update(productId, data,
     function(r) {
-      alert("✅ Product updated!");
-      $("#editProductModal").modal('hide');
-      loadAdminProducts(); // Reload list
-      renderProductsPage(); // Refresh products page if open
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Product updated!");
+        $("#editProductModal").modal('hide');
+        loadAdminProducts(); // Reload list
+        renderProductsPage(); // Refresh products page if open
+      }, 400);
     },
     function(xhr) {
-      alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      }, 400);
     }
   );
 });
@@ -474,14 +520,23 @@ $(document).on("click", ".delete-product-btn", function() {
     return;
   }
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   ProductService.delete(productId,
     function(r) {
-      alert("✅ Product deleted!");
-      loadAdminProducts(); // Reload list
-      renderProductsPage(); // Refresh products page if open
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Product deleted!");
+        loadAdminProducts(); // Reload list
+        renderProductsPage(); // Refresh products page if open
+      }, 400);
     },
     function(xhr) {
-      alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      }, 400);
     }
   );
 });
