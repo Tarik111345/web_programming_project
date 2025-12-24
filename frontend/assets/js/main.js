@@ -1,14 +1,4 @@
 $(document).ready(function () {
-  // Configure BlockUI to appear above Bootstrap modals
-  $.blockUI.defaults.css.border = 'none';
-  $.blockUI.defaults.css.padding = '15px';
-  $.blockUI.defaults.css.backgroundColor = '#000';
-  $.blockUI.defaults.css['-webkit-border-radius'] = '10px';
-  $.blockUI.defaults.css['-moz-border-radius'] = '10px';
-  $.blockUI.defaults.css.opacity = 0.5;
-  $.blockUI.defaults.css.color = '#fff';
-  $.blockUI.defaults.baseZ = 2000; // Higher than Bootstrap modals (1055)
-
   window.app = $.spapp({
     defaultView: "home",
     templateDir: "./views/",
