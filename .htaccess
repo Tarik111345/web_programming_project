@@ -1,0 +1,12 @@
+# Redirect root to frontend
+DirectoryIndex frontend/index.html
+
+# Disable directory listing
+Options -Indexes
+
+# Rewrite rules
+RewriteEngine On
+
+# Redirect root to frontend
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^$ /frontend/ [L,R=301]

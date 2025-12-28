@@ -1,6 +1,6 @@
 // ProductService - handles all product API calls with JWT
 const ProductService = {
-  API_URL: 'http://localhost/hadrofit/backend/api',
+  API_URL: 'https://hadrofit-vxizr.ondigitalocean.app/backend/api',
 
   // Get all products
   getAll: function(successCallback, errorCallback) {
