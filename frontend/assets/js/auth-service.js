@@ -1,6 +1,6 @@
 // AuthService - handles all authentication API calls
 const AuthService = {
-  API_URL: 'http://localhost/hadrofit/backend',
+  API_URL: 'https://hadrofit-vxizr.ondigitalocean.app/backend',
   
   // Register new user
   register: function(userData, successCallback, errorCallback) {

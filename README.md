@@ -236,3 +236,128 @@ To run test.php we I used: http://localhost/hadrofit/backend/rest/test.php
 ## Technologies
 - Backend: PHP, FlightPHP, JWT, MySQL
 - Frontend: jQuery, Bootstrap 5, SPApp
+
+---
+
+## Milestone 5: Frontend Validations & Production Deployment
+
+**Live Application:** https://hadrofit-vxizr.ondigitalocean.app/
+
+### Milestone 4 Issues Fixed
+
+In Milestone 4, there were issues with frontend CRUD operations due to header transmission problems between jQuery and Apache. These have been completely resolved:
+
+- Refactored API calls to use proper `$.ajax()` configuration
+- Fixed JWT token transmission in Authorization headers
+- Implemented BlockUI for better user feedback
+- Added error handling with detailed messages
+- All CRUD operations (Create, Read, Update, Delete) now work correctly
+- Admin panel is fully functional
+
+### What Was Implemented
+
+#### 1. Frontend Validations
+- Client-side validation using jQuery Validation Plugin
+- Validation rules:
+  - Name: minimum 3 characters
+  - Email: valid email format
+  - Password: 6-20 characters
+  - Product price: must be positive
+  - Product stock: cannot be negative
+  - Category ID: valid positive integer
+- Real-time validation feedback
+- Form submission blocked until validation passes
+
+#### 2. User Experience
+- Loading indicators during API calls (BlockUI)
+- Success/error alerts with messages from backend
+- Smooth page transitions
+- Responsive design for mobile and desktop
+
+#### 3. Production Deployment
+
+**Infrastructure:**
+- Platform: DigitalOcean App Platform
+- Database: DigitalOcean Managed MySQL Database
+- Containerization: Docker
+- Web Server: Apache 2.4 with PHP 8.1
+- Security: HTTPS/SSL
+- CI/CD: Auto-deployment from GitHub
+
+**Configuration:**
+- Environment variables for production (DB credentials, JWT secret)
+- Updated config.php to support environment variables
+- Separate configurations for development and production
+
+**Database (Production):**
+- Host: hadrofit-db-do-user-31164408-0.h.db.ondigitalocean.com
+- Port: 25060
+- Database: hadrofit
+- Connection: PDO with SSL/TLS
+
+### Deployment Steps
+
+1. Created DigitalOcean Managed MySQL Database
+2. Imported database schema and data
+3. Updated config.php for environment variables
+4. Created Dockerfile for PHP + Apache + MySQL PDO
+5. Created apache-config.conf for routing
+6. Configured App Platform environment variables
+7. Connected GitHub repository (milestone5 branch)
+8. Enabled auto-deployment on push
+9. Updated frontend API URLs to production
+10. Fixed case-sensitive file issue (roles.php to Roles.php)
+11. Tested all features in production
+
+### Note on Production Database
+
+The production database currently contains 2 products (Multivitamins and Creatine Monohydrate) for demonstration purposes. This limited dataset was used to verify all functionality works correctly, which is common practice for initial deployments.
+
+Despite having only 2 products, the application demonstrates all required features:
+- Database connectivity to cloud
+- All REST API operations (GET, POST, PUT, DELETE)
+- User registration and login with JWT
+- Role-based access control
+- CRUD operations via Admin Panel
+- Client and server-side validations
+- Frontend-backend integration
+- Responsive design
+- 24/7 availability
+
+Additional products can be added through the Admin Panel, database import, or API calls.
+
+### Testing the Application
+
+**Production URL:** https://hadrofit-vxizr.ondigitalocean.app/
+
+**Registration:**
+1. Click "Register"
+2. Fill form with validation
+3. User created in cloud database
+
+**Login:**
+1. Enter credentials
+2. JWT token stored in localStorage
+3. Redirected to dashboard
+
+**Products Page:**
+1. Navigate to "Products"
+2. View products loaded from API
+3. Data fetched from cloud database
+
+**Admin Panel** (if admin user exists):
+1. Login as admin
+2. Add/edit/delete products
+3. Changes persist in database
+
+### Technologies
+
+**Frontend:** HTML5, CSS3, JavaScript, jQuery, Bootstrap 5, jQuery SPApp, jQuery Validation, jQuery BlockUI
+
+**Backend:** PHP 8.1, FlightPHP, JWT, PDO, MySQL
+
+**DevOps:** Docker, DigitalOcean App Platform, DigitalOcean Managed Database, GitHub, Apache 2.4, SSL/TLS
+
+### Summary
+
+Milestone 5 delivers a fully functional e-commerce application deployed on DigitalOcean with complete frontend-backend integration, JWT authentication, role-based authorization, CRUD operations, validations, and auto-deployment from GitHub.

@@ -5,7 +5,13 @@ $(document).ready(function () {
   });
 
   app.route({ view: "home",           load: "home.html" });
-  app.route({ view: "products_list",  load: "products_list.html" });
+  app.route({
+    view: "products_list",
+    load: "products_list.html",
+    onReady: function() {
+      renderProductsPage(); // Load products from database
+    }
+  });
   app.route({ view: "cart",           load: "cart.html" });
   app.route({ view: "checkout",       load: "checkout.html" });
   app.route({ view: "dashboard_user", load: "dashboard_user.html" });
@@ -229,15 +235,24 @@ $(document).on("submit", "#registerForm", function (e) {
     return;
   }
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   // Call API
   AuthService.register(
     { name, email, password },
     function(response) {
-      alert("✅ Registration successful! You can now log in.");
-      window.location.hash = "#login";
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Registration successful! You can now log in.");
+        window.location.hash = "#login";
+      }, 400);
     },
     function(error) {
-      alert("❌ " + (error.responseJSON?.error || "Registration failed!"));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ " + (error.responseJSON?.error || "Registration failed!"));
+      }, 400);
     }
   );
 });
@@ -254,14 +269,23 @@ $(document).on("submit", "#loginForm", function (e) {
     return;
   }
 
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
   AuthService.login(
     { email, password },
     function(response) {
-      alert(`✅ Welcome back, ${response.data.name}!`);
-      window.location.hash = "#dashboard_user";
+      setTimeout(function() {
+        $.unblockUI();
+        alert(`✅ Welcome back, ${response.data.name}!`);
+        window.location.hash = "#dashboard_user";
+      }, 400);
     },
     function(error) {
-      alert("❌ " + (error.responseJSON?.error || "Login failed!"));
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ " + (error.responseJSON?.error || "Login failed!"));
+      }, 400);
     }
   );
 });
@@ -281,6 +305,7 @@ function renderDashboard() {
   // Show admin section if admin
   if (user.role === 'admin') {
     $("#adminSection").show();
+    loadAdminProducts(); // Load product list for admin
   } else {
     $("#adminSection").hide();
   }
@@ -313,24 +338,195 @@ function renderDashboard() {
   cartTotalEl.text(total.toFixed(2));
 }
 
+// ===== PRODUCTS PAGE - Load from database =====
+function renderProductsPage() {
+  const container = $("#productsContainer");
+  if (container.length === 0) return; // Not on products page
+
+  ProductService.getAll(
+    function(products) {
+      container.empty();
+      products.forEach(function(p) {
+        const imageUrl = p.image || p.image_url || 'assets/img/default-product.jpg';
+        container.append(`
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm product-card" data-id="${p.id}">
+              <img src="${imageUrl}" class="card-img-top" alt="${p.name}" style="height: 200px; object-fit: cover;">
+              <div class="card-body text-center">
+                <h5 class="card-title fw-bold">${p.name}</h5>
+                <p class="card-text text-muted">$${parseFloat(p.price).toFixed(2)}</p>
+                <button class="btn btn-warning btn-sm px-3 add-to-cart">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    },
+    function(err) {
+      console.error("Failed to load products:", err);
+      container.html('<div class="col-12"><p class="text-center">Failed to load products.</p></div>');
+    }
+  );
+}
+
+// ===== ADMIN PRODUCT MANAGEMENT =====
+
+// Load admin products list
+function loadAdminProducts() {
+  ProductService.getAll(
+    function(products) {
+      const tbody = $("#adminProductsList");
+      tbody.empty();
+      products.forEach(function(p) {
+        tbody.append(`
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>$${parseFloat(p.price).toFixed(2)}</td>
+            <td>${p.stock || 0}</td>
+            <td>${p.category_id}</td>
+            <td>
+              <button class="btn btn-sm btn-warning edit-product-btn" data-id="${p.id}">Edit</button>
+              <button class="btn btn-sm btn-danger delete-product-btn" data-id="${p.id}">Delete</button>
+            </td>
+          </tr>
+        `);
+      });
+    },
+    function(err) {
+      console.error("Failed to load products:", err);
+    }
+  );
+}
+
 // Add product handler (admin only)
 $(document).on("submit", "#addProductForm", function(e) {
   e.preventDefault();
+
+  const form = $(this);
   const data = {
-    name: $("input[name='name']").val(),
-    description: $("textarea[name='description']").val(),
-    price: parseFloat($("input[name='price']").val()),
-    category_id: parseInt($("input[name='category_id']").val()),
-    stock: parseInt($("input[name='stock']").val())
+    name: form.find("input[name='name']").val(),
+    description: form.find("textarea[name='description']").val(),
+    price: parseFloat(form.find("input[name='price']").val()),
+    category_id: parseInt(form.find("input[name='category_id']").val()),
+    stock: parseInt(form.find("input[name='stock']").val()),
+    image: form.find("input[name='image']").val() || null
   };
-  
-  ProductService.create(data, 
-    function(r) { 
-      alert("✅ Product added!"); 
-      $("#addProductModal").modal('hide');
+
+  // Validate
+  if (!data.name || !data.price || !data.category_id) {
+    alert("❌ Please fill in all required fields (name, price, category_id)!");
+    return;
+  }
+
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
+  ProductService.create(data,
+    function(r) {
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Product added!");
+        $("#addProductModal").modal('hide');
+        form[0].reset();
+        loadAdminProducts(); // Reload list
+        renderProductsPage(); // Refresh products page if open
+      }, 400);
     },
-    function(e) { 
-      alert("❌ Error adding product!"); 
+    function(xhr) {
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      }, 400);
+    }
+  );
+});
+
+// Edit product - open modal with data
+$(document).on("click", ".edit-product-btn", function() {
+  const productId = $(this).data("id");
+
+  ProductService.getById(productId,
+    function(product) {
+      const form = $("#editProductForm");
+      form.find("input[name='id']").val(product.id);
+      form.find("input[name='name']").val(product.name);
+      form.find("textarea[name='description']").val(product.description || '');
+      form.find("input[name='price']").val(product.price);
+      form.find("input[name='category_id']").val(product.category_id);
+      form.find("input[name='stock']").val(product.stock || 0);
+      form.find("input[name='image']").val(product.image || product.image_url || '');
+
+      $("#editProductModal").modal('show');
+    },
+    function(err) {
+      alert("❌ Failed to load product!");
+    }
+  );
+});
+
+// Update product handler
+$(document).on("submit", "#editProductForm", function(e) {
+  e.preventDefault();
+
+  const form = $(this);
+  const productId = form.find("input[name='id']").val();
+  const data = {
+    name: form.find("input[name='name']").val(),
+    description: form.find("textarea[name='description']").val(),
+    price: parseFloat(form.find("input[name='price']").val()),
+    category_id: parseInt(form.find("input[name='category_id']").val()),
+    stock: parseInt(form.find("input[name='stock']").val()),
+    image: form.find("input[name='image']").val() || null
+  };
+
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
+  ProductService.update(productId, data,
+    function(r) {
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Product updated!");
+        $("#editProductModal").modal('hide');
+        loadAdminProducts(); // Reload list
+        renderProductsPage(); // Refresh products page if open
+      }, 400);
+    },
+    function(xhr) {
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      }, 400);
+    }
+  );
+});
+
+// Delete product handler
+$(document).on("click", ".delete-product-btn", function() {
+  const productId = $(this).data("id");
+
+  if (!confirm("Are you sure you want to delete this product?")) {
+    return;
+  }
+
+  // Block UI
+  $.blockUI({ message: '<h3>Processing...</h3>' });
+
+  ProductService.delete(productId,
+    function(r) {
+      setTimeout(function() {
+        $.unblockUI();
+        alert("✅ Product deleted!");
+        loadAdminProducts(); // Reload list
+        renderProductsPage(); // Refresh products page if open
+      }, 400);
+    },
+    function(xhr) {
+      setTimeout(function() {
+        $.unblockUI();
+        alert("❌ Error: " + (xhr.responseJSON ? xhr.responseJSON.error : xhr.responseText));
+      }, 400);
     }
   );
 });

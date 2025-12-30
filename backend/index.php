@@ -29,42 +29,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 Flight::register('auth_service', 'AuthService');
 Flight::register('auth_middleware', 'AuthMiddleware');
 
-Flight::route('/*', function() {
+// Auth middleware - runs BEFORE routing
+Flight::before('start', function() {
     $url = Flight::request()->url;
-    
+
+    // Allow these routes without authentication
     if(
-        strpos($url, 'login') !== false || 
+        strpos($url, 'login') !== false ||
         strpos($url, 'register') !== false ||
-        strpos($url, 'docs') !== false
+        strpos($url, 'docs') !== false ||
+        // Allow GET requests to products (public browsing)
+        (strpos($url, 'products') !== false && $_SERVER['REQUEST_METHOD'] === 'GET')
     ) {
         return TRUE;
     }
-    
+
     try {
         $token = null;
-        
+
         // PRIORITY 1: Check query parameter
         if (isset($_GET['token'])) {
             $token = $_GET['token'];
         }
-        
+
         // PRIORITY 2: Check headers
         if (!$token && isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $token = $_SERVER['HTTP_AUTHORIZATION'];
         } elseif (!$token && isset($_SERVER['HTTP_AUTHENTICATION'])) {
             $token = $_SERVER['HTTP_AUTHENTICATION'];
         }
-        
+
         // Remove "Bearer " prefix if present
         if ($token && strpos($token, 'Bearer ') === 0) {
             $token = substr($token, 7);
         }
-        
+
         if (!$token) {
             Flight::halt(401, "Missing authentication header");
         }
-        
-        Flight::auth_middleware()->verifyToken($token);
+
+        // Verify token and set user in Flight context
+        try {
+            $decoded_token = JWT::decode($token, new Key(Database::JWT_SECRET(), 'HS256'));
+            Flight::set('user', $decoded_token->user);
+            Flight::set('jwt_token', $token);
+        } catch (\Exception $e) {
+            Flight::halt(401, "Invalid token: " . $e->getMessage());
+        }
+
         return TRUE;
     } catch (\Exception $e) {
         Flight::halt(401, $e->getMessage());
